@@ -1,0 +1,26 @@
+{
+    "name": "nlisgo/abstract-babel",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AbstractBabel\\": "./src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\AbstractBabel\\": "./tests"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/serializer": "^4.0"
+    },
+    "require-dev": {
+        "csa/guzzle-cache-middleware": "^1.0",
+        "phpunit/phpunit": "^5.7"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
