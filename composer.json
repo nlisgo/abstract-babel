@@ -14,13 +14,16 @@
     },
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/serializer": "^4.0"
+        "silex/silex": "^2.2",
+        "symfony/serializer": "^3.3"
     },
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",
+        "giorgiosironi/eris": "^0.10.0",
         "phpunit/phpunit": "^5.7"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {"php": "7.0.8"}
     }
 }

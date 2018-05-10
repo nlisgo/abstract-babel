@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'crossref' => [
+        'api_url' => 'https://api.crossref.org/works/',
+    ],
+];

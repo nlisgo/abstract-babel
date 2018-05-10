@@ -1,2 +1,4 @@
-/vendor
+/.php_cs.cache
+/config.php
 /composer.lock
+/vendor
