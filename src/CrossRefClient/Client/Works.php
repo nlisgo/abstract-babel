@@ -4,7 +4,7 @@ namespace AbstractBabel\CrossRefClient\Client;
 
 use AbstractBabel\CrossRefClient\ApiClient\WorksClient;
 use AbstractBabel\CrossRefClient\Model\Work as ModelWork;
-use AbstractBabel\CrossRefClient\Result\Result;
+use AbstractBabel\Client\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 

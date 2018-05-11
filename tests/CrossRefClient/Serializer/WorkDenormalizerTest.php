@@ -4,13 +4,13 @@ namespace tests\AbstractBabel\CrossRefClient\Serializer;
 
 use AbstractBabel\CrossRefClient\Model\Work;
 use AbstractBabel\CrossRefClient\Serializer\WorkDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * @covers \AbstractBabel\CrossRefClient\Serializer\TokenDenormalizer
  */
-final class WorkDenormalizerTest extends PHPUnit_Framework_TestCase
+final class WorkDenormalizerTest extends TestCase
 {
     /** @var WorkDenormalizer */
     private $normalizer;

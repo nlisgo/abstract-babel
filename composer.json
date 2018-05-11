@@ -13,14 +13,22 @@
         }
     },
     "require": {
+        "aws/aws-sdk-php": "^3.55",
+        "elife/api-problem": "^1.1",
+        "elife/ping": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "silex/silex": "^2.2",
-        "symfony/serializer": "^3.3"
+        "symfony/serializer": "^3.3",
+        "symfony/twig-bridge": "^3.4",
+        "twig/twig": "^2.4"
     },
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",
         "giorgiosironi/eris": "^0.10.0",
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "^5.7",
+        "symfony/browser-kit": "^3.4",
+        "symfony/psr-http-message-bridge": "^1.0",
+        "zendframework/zend-diactoros": "^1.7"
     },
     "config": {
         "sort-packages": true,

@@ -2,8 +2,9 @@
 
 namespace AbstractBabel\CrossRefClient\ApiClient;
 
-use AbstractBabel\CrossRefClient\HttpClient\HttpClient;
-use AbstractBabel\CrossRefClient\HttpClient\UserAgentPrependingHttpClient;
+use AbstractBabel\Client\ApiClient;
+use AbstractBabel\Client\HttpClient\HttpClient;
+use AbstractBabel\Client\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 

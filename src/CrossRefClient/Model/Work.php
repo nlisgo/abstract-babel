@@ -12,7 +12,7 @@ final class Work
     public function __construct(
         string $abstract
     ) {
-        $this->abstract = $abstract;
+        $this->abstract = strip_tags($abstract);
     }
 
     public function getAbstract() : string

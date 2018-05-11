@@ -3,11 +3,16 @@
 namespace AbstractBabel\Babel;
 
 use AbstractBabel\Babel\Controller\BabelController;
-use AbstractBabel\CrossRefClient\ApiSdk as CrossRefSdk;
+use AbstractBabel\Babel\Controller\HomeController;
+use AbstractBabel\CrossRefClient\CrossRefSdk;
+use AbstractBabel\TranslateClient\TranslateSdk;
+use Aws\Translate\TranslateClient;
 use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
-use AbstractBabel\CrossRefClient\HttpClient\BatchingHttpClient as CrossRefBatchingHttpClient;
-use AbstractBabel\CrossRefClient\HttpClient\Guzzle6HttpClient as CrossRefGuzzle6HttpClient;
-use AbstractBabel\CrossRefClient\HttpClient\NotifyingHttpClient as CrossRefNotifyingHttpClient;
+use AbstractBabel\Client\HttpClient\BatchingHttpClient;
+use AbstractBabel\Client\HttpClient\Guzzle6HttpClient;
+use AbstractBabel\Client\HttpClient\NotifyingHttpClient;
+use eLife\ApiProblem\Silex\ApiProblemProvider;
+use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Pimple\Exception\UnknownIdentifierException;
@@ -40,10 +45,21 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'crossref' => ($config['crossref'] ?? []) + [
                 'api_url' => 'https://api.crossref.org/',
             ],
+            'aws' => ($config['aws'] ?? []) + [
+                'credential_file' => true,
+                'region' => 'eu-west-1',
+            ],
             'mock' => $config['mock'] ?? false,
         ]);
 
+        $this->app->register(new ApiProblemProvider());
+        $this->app->register(new PingControllerProvider());
         $this->app->register(new ServiceControllerServiceProvider());
+        $this->app->register(new TwigServiceProvider(), [
+            'twig.path' => __DIR__.'/views',
+        ]);
+
+        $this->app['api_problem.factory.include_exception_details'] = $config['api_problem']['factory']['include_exception_details'] ?? $this->app['debug'];
 
         if ($this->app['debug']) {
             $this->app->register(new HttpFragmentServiceProvider());
@@ -74,17 +90,17 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             return new Client([
                 'base_uri' => $this->app['crossref']['api_url'],
-                'connect_timeout' => 0.5,
+                'connect_timeout' => 2.5,
                 'decode_content' => 'gzip',
                 'handler' => $this->app['crossref.guzzle.handler'],
-                'timeout' => 0.9,
+                'timeout' => 2.9,
             ]);
         };
 
         $this->app['crossref.sdk'] = function () {
-            $notifyingHttpClient = new CrossRefNotifyingHttpClient(
-                new CrossRefBatchingHttpClient(
-                    new CrossRefGuzzle6HttpClient(
+            $notifyingHttpClient = new NotifyingHttpClient(
+                new BatchingHttpClient(
+                    new Guzzle6HttpClient(
                         $this->app['crossref.guzzle']
                     ),
                     $this->app['api.requests_batch']
@@ -94,11 +110,36 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new CrossRefSdk($notifyingHttpClient);
         };
 
-        $this->app['controllers.babel'] = function () {
-            return new BabelController($this->app['crossref.sdk']);
+        $this->app['aws.translate'] = function () {
+            $config = [
+                'version' => $this->app['aws']['version'] ?? '2017-07-01',
+                'region' => $this->app['aws']['region'],
+            ];
+
+            if (!isset($this->app['aws']['credential_file']) || $this->app['aws']['credential_file'] === false) {
+                $config['credentials'] = [
+                    'key' => $this->app['aws']['key'],
+                    'secret' => $this->app['aws']['secret'],
+                ];
+            }
+
+            return new TranslateClient($config);
         };
 
-        $this->app->get('/babel', 'controllers.babel:babelAction');
+        $this->app['translate.sdk'] = function () {
+            return new TranslateSdk($this->app['aws.translate']);
+        };
+
+        $this->app['controllers.babel'] = function () {
+            return new BabelController($this->app['crossref.sdk'], $this->app['translate.sdk']);
+        };
+
+        $this->app->get('/babel', 'controllers.babel:babelAction')
+            ->bind('babel');
+
+        $this->app->get('/', function () {
+            return 'Home page';
+        })->bind('home');
 
         $this->app->after(function (Request $request, Response $response) {
             if ($response->isCacheable()) {

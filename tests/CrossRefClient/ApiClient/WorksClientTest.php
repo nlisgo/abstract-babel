@@ -2,13 +2,13 @@
 
 namespace tests\AbstractBabel\CrossRefClient\ApiClient;
 
+use AbstractBabel\Client\HttpClient\HttpClient;
+use AbstractBabel\Client\Result\ArrayResult;
 use AbstractBabel\CrossRefClient\ApiClient\WorksClient;
-use AbstractBabel\CrossRefClient\HttpClient\HttpClient;
-use AbstractBabel\CrossRefClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
-use tests\AbstractBabel\CrossRefClient\RequestConstraint;
+use tests\AbstractBabel\Client\RequestConstraint;
 
 /**
  * @covers \AbstractBabel\CrossRefClient\ApiClient\WorksClient

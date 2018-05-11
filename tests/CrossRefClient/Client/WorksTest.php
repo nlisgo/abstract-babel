@@ -2,16 +2,16 @@
 
 namespace tests\AbstractBabel\CrossRefClient\Client;
 
+use AbstractBabel\Client\HttpClient\HttpClient;
+use AbstractBabel\Client\Result\ArrayResult;
 use AbstractBabel\CrossRefClient\ApiClient\WorksClient;
 use AbstractBabel\CrossRefClient\Client\Works;
-use AbstractBabel\CrossRefClient\HttpClient\HttpClient;
 use AbstractBabel\CrossRefClient\Model\Work as ModelWork;
-use AbstractBabel\CrossRefClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use tests\AbstractBabel\CrossRefClient\RequestConstraint;
+use tests\AbstractBabel\Client\RequestConstraint;
 
 /**
  * @covers \AbstractBabel\CrossRefClient\Client\Token
@@ -57,16 +57,16 @@ final class WorksTest extends TestCase
                 'abstract' => 'abstract',
             ],
         ]));
-        $token = new ModelWork('abstract');
+        $work = new ModelWork('abstract');
         $this->denormalizer
             ->method('denormalize')
             ->with($response->wait()->toArray(), ModelWork::class)
-            ->willReturn($token);
+            ->willReturn($work);
         $this->httpClient
             ->expects($this->once())
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertSame($token, $this->works->get('doi')->wait());
+        $this->assertSame($work, $this->works->get('doi')->wait());
     }
 }
