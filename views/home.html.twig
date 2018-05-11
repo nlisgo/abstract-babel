@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+{% block title "Abstract Babel" %}
+
+{% block content %}
+	<h1>Abstract Babel</h1>
+    <form action="/">
+        <label for="doi">Doi:</label> <input type="text" name="doi" value="{{ doi|default('') }}" placeholder="doi" id="doi" /><br>
+        <label for="from">Source language</label> <input type="text" name="from" value="{{ from|default('en') }}" id="from" /><br>
+        <label for="to">Target language</label> <input type="text" name="to" value="{{ from|default('fr') }}" id="to" /><br>
+        <textarea id="abstract" name="abstract" rows="4" cols="50" disabled="disabled">{{ abstract|default('') }}</textarea>
+        <textarea id="translation" name="translation" rows="4" cols="50" disabled="disabled">{{ translation|default('') }}</textarea>
+        <input type="submit" value="Translate">
+    </form>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="assets/css/home.css" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="assets/js/home.js"></script>
+{% endblock %}

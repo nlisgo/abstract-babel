@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{% block title "Welcome on my site!" %}</title>
+		<title>{% block title "Abstract Babel" %}</title>
 		{% block stylesheets %}
-			<link href="css/style.css" rel="stylesheet" />
+			<link href="assets/css/babel.css" rel="stylesheet" />
 		{% endblock %}
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        {% endblock %}
 	</head>
 	<body>
 		{% block content "" %}
-		{% block javascripts %}
-			<script src="js/jquery.js"></script>
-		{% endblock %}
 	</body>
 </html>
