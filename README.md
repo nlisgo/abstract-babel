@@ -16,6 +16,25 @@ Visit: <http://localhost:8080/babel?doi=10.7554/eLife.36998&from=en&to=fr>
 
 Swap the doi, from and to values to translate your favourite abstract.
 
+## Stored approved translations
+
+A rudimentary store of translations has been added to demonstrate the behaviour if an approved translation has been supplied.
+
+Add approved translations in json in the location: `./translations/[doi]/[to_lang].json`
+
+It should have the structure:
+
+```
+# See: ./translations/10.7554/eLife.06813/fr.json
+{
+    "abstract": "La souris sylvestre (genre Peromyscus) est le mammifère le plus abondant en Amérique..."
+}
+```
+
+To return the stored translation <http://localhost:8080/babel?doi=10.7554/eLife.06813&from=en&to=fr>
+
+To avoid checking the store and request a new translation: <http://localhost:8080/babel?doi=10.7554/eLife.06813&from=en&to=fr&check-store=0>
+
 ## Examples
 
 The following examples were used to test different translation tools, and to provide content for the design of prototypes.

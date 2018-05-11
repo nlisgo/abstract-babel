@@ -5,6 +5,7 @@ namespace AbstractBabel\Babel\Controller;
 use AbstractBabel\CrossRefClient\CrossRefSdk;
 use AbstractBabel\Babel\ApiResponse;
 use AbstractBabel\CrossRefClient\Model\Work;
+use AbstractBabel\TranslateClient\Model\Translation;
 use AbstractBabel\TranslateClient\TranslateSdk;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ final class BabelController
         $doi = $request->query->get('doi');
         $from = $request->query->get('from', 'en');
         $to = $request->query->get('to');
+        $checkStore = $request->query->get('check-store', true);
 
         // Verify that $doi parameter is present.
         if (!is_string($doi) || empty($doi)) {
@@ -39,29 +41,32 @@ final class BabelController
             throw new BadRequestHttpException('Missing to value');
         }
 
-        try {
-            $translation = $this->translateSdk->stored()->get($doi, $to);
-            $content = [
-                'abstract' => $translation->getAbstract(),
-            ];
-        } catch (Exception $e) {
-            // Perform query to CrossRef API.
-            $content = $this->crossRefSdk->works()->get($doi)
-                ->then(function (Work $work) use ($to, $from) {
-                    $translation = $this->translateSdk->translate()->get($work->getAbstract(), $to, $from);
-                    return [
-                        'abstract' => $translation->getAbstract(),
-                    ];
-                })->wait();
+        $translation = null;
+
+        if ($checkStore) {
+            try {
+                $translation = $this->translateSdk->stored()->get($doi, $to);
+            } catch (Exception $e) {}
         }
 
         // Set Content-Type.
         $headers = ['Content-Type' => 'application/json'];
 
         return new ApiResponse(
-            $content,
+            [
+                'abstract' => ($translation ?? $this->requestTranslation($doi, $to, $from))->getAbstract(),
+            ],
             Response::HTTP_OK,
             $headers
         );
+    }
+
+    private function requestTranslation($doi, $to, $from = 'en') : Translation
+    {
+        // Perform query to CrossRef API.
+        return $this->crossRefSdk->works()->get($doi)
+            ->then(function (Work $work) use ($to, $from) {
+                return $this->translateSdk->translate()->get($work->getAbstract(), $to, $from);
+            })->wait();
     }
 }
