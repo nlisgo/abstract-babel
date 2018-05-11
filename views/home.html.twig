@@ -3,15 +3,48 @@
 {% block title "Abstract Babel" %}
 
 {% block content %}
-	<h1>Abstract Babel</h1>
-    <form action="/">
-        <label for="doi">Doi:</label> <input type="text" name="doi" value="{{ doi|default('') }}" placeholder="doi" id="doi" /><br>
-        <label for="from">Source language</label> <input type="text" name="from" value="{{ from|default('en') }}" id="from" /><br>
-        <label for="to">Target language</label> <input type="text" name="to" value="{{ to|default('fr') }}" id="to" /><br>
-        <textarea id="abstract" name="abstract" rows="15" cols="50" disabled="disabled">{{ abstract|default('') }}</textarea>
-        <textarea id="translation" name="translation" rows="15" cols="50" disabled="disabled">{{ translation|default('') }}</textarea><br>
-        <input type="submit" value="Translate">
-    </form>
+    <div class="row">
+        <div class="col s12">
+            <h1 class="header">Abstract Babel</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <form action="/" class="col s12">
+            <fieldset>
+                <legend>Retrieve and translate your abstract</legend>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="doi" value="{{ doi|default('') }}" placeholder="doi" id="doi" class="validate" />
+                        <label for="doi">Doi</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input type="text" name="from" value="{{ from|default('en') }}" id="from" class="validate" />
+                        <label for="from">Source language</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input type="text" name="to" value="{{ to|default('fr') }}" id="to" class="validate" />
+                        <label for="from">Target language</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="abstract" name="abstract" disabled="disabled" class="materialize-textarea">{{ abstract|default('') }}</textarea>
+                        <label for="abstract">Abstract</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="translation" name="translation" disabled="disabled" class="materialize-textarea">{{ translation|default('') }}</textarea>
+                        <label for="translation">Translation</label>
+                    </div>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Translate</button>
+            </fieldset>
+        </form>
+    </div>
 {% endblock %}
 
 {% block stylesheets %}
