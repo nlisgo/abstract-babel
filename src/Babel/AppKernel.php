@@ -56,7 +56,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         $this->app->register(new PingControllerProvider());
         $this->app->register(new ServiceControllerServiceProvider());
         $this->app->register(new TwigServiceProvider(), [
-            'twig.path' => __DIR__.'/views',
+            'twig.path' => __DIR__.'/../../views',
         ]);
 
         $this->app['api_problem.factory.include_exception_details'] = $config['api_problem']['factory']['include_exception_details'] ?? $this->app['debug'];
@@ -134,12 +134,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new BabelController($this->app['crossref.sdk'], $this->app['translate.sdk']);
         };
 
-        $this->app->get('/babel', 'controllers.babel:babelAction')
-            ->bind('babel');
+        $this->app->get('/babel', 'controllers.babel:babelAction');
 
         $this->app->get('/', function () {
-            return 'Home page';
-        })->bind('home');
+            return $this->app['twig']->render('hello.html.twig');
+        });
 
         $this->app->after(function (Request $request, Response $response) {
             if ($response->isCacheable()) {

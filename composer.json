@@ -19,8 +19,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "silex/silex": "^2.2",
         "symfony/serializer": "^3.3",
-        "symfony/twig-bridge": "^3.4",
-        "twig/twig": "^2.4"
+        "symfony/twig-bridge": "^3.4"
     },
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",

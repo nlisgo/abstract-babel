@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block title "Hello world!" %}
+
+{% block content %}
+	<h1>Hello world!</h1>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="css/hello.css" rel="stylesheet" />
+{% endblock %}

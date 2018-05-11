@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title "Welcome on my site!" %}</title>
+		{% block stylesheets %}
+			<link href="css/style.css" rel="stylesheet" />
+		{% endblock %}
+	</head>
+	<body>
+		{% block content "" %}
+		{% block javascripts %}
+			<script src="js/jquery.js"></script>
+		{% endblock %}
+	</body>
+</html>
