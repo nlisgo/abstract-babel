@@ -6,6 +6,7 @@ use AbstractBabel\CrossRefClient\CrossRefSdk;
 use AbstractBabel\Babel\ApiResponse;
 use AbstractBabel\CrossRefClient\Model\Work;
 use AbstractBabel\TranslateClient\TranslateSdk;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -38,14 +39,21 @@ final class BabelController
             throw new BadRequestHttpException('Missing to value');
         }
 
-        // Perform query to CrossRef API.
-        $content = $this->crossRefSdk->works()->get($doi)
-            ->then(function (Work $work) use ($to, $from) {
-                $translation = $this->translateSdk->translate()->get($work->getAbstract(), $to, $from);
-                return [
-                    'abstract' => $translation->getAbstract(),
-                ];
-            })->wait();
+        try {
+            $translation = $this->translateSdk->stored()->get($doi, $to);
+            $content = [
+                'abstract' => $translation->getAbstract(),
+            ];
+        } catch (Exception $e) {
+            // Perform query to CrossRef API.
+            $content = $this->crossRefSdk->works()->get($doi)
+                ->then(function (Work $work) use ($to, $from) {
+                    $translation = $this->translateSdk->translate()->get($work->getAbstract(), $to, $from);
+                    return [
+                        'abstract' => $translation->getAbstract(),
+                    ];
+                })->wait();
+        }
 
         // Set Content-Type.
         $headers = ['Content-Type' => 'application/json'];

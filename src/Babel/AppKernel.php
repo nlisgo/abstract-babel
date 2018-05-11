@@ -5,6 +5,7 @@ namespace AbstractBabel\Babel;
 use AbstractBabel\Babel\Controller\BabelController;
 use AbstractBabel\Babel\Controller\HomeController;
 use AbstractBabel\CrossRefClient\CrossRefSdk;
+use AbstractBabel\TranslateClient\Client\StoredTranslate;
 use AbstractBabel\TranslateClient\TranslateSdk;
 use Aws\Translate\TranslateClient;
 use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
@@ -50,6 +51,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'region' => 'eu-west-1',
             ],
             'mock' => $config['mock'] ?? false,
+            'stored_translations' => __DIR__.'/../../translations',
         ]);
 
         $this->app->register(new ApiProblemProvider());
@@ -63,7 +65,6 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         if ($this->app['debug']) {
             $this->app->register(new HttpFragmentServiceProvider());
-            $this->app->register(new TwigServiceProvider());
         }
 
         $this->app['crossref.guzzle.handler'] = function () {
@@ -127,7 +128,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         };
 
         $this->app['translate.sdk'] = function () {
-            return new TranslateSdk($this->app['aws.translate']);
+            return new TranslateSdk($this->app['aws.translate'], new StoredTranslate($this->app['stored_translations']));
         };
 
         $this->app['controllers.babel'] = function () {
