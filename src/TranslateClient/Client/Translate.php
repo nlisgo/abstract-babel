@@ -28,6 +28,6 @@ final class Translate
             'Text' => $text,
         ]);
 
-        return $this->serializer->denormalize($message->toArray(), Translation::class);
+        return $this->serializer->denormalize($message->toArray() + ['original' => $text], Translation::class);
     }
 }

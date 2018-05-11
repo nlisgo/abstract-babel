@@ -24,7 +24,7 @@ final class StoredTranslate
             $file = sprintf('%s/%s/%s.json', $this->storedDir, $doi, $to);
             if (is_file($file)) {
                 $store = json_decode(file_get_contents($file), true);
-                return new Translation($store['abstract'], $to);
+                return new Translation($store['original'], $store['abstract'], $to);
             }
         }
 

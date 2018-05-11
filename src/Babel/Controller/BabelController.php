@@ -52,9 +52,13 @@ final class BabelController
         // Set Content-Type.
         $headers = ['Content-Type' => 'application/json'];
 
+        $translation = ($translation ?? $this->requestTranslation($doi, $to, $from));
+
         return new ApiResponse(
             [
-                'abstract' => ($translation ?? $this->requestTranslation($doi, $to, $from))->getAbstract(),
+                'abstract' => $translation->getAbstract(),
+                'language' => $translation->getLanguage(),
+                'original' => $translation->getOriginal(),
             ],
             Response::HTTP_OK,
             $headers

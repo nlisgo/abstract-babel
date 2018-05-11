@@ -4,6 +4,7 @@ namespace AbstractBabel\TranslateClient\Model;
 
 final class Translation
 {
+    private $original;
     private $abstract;
     private $language;
 
@@ -11,11 +12,18 @@ final class Translation
      * @internal
      */
     public function __construct(
+        string $original,
         string $abstract,
         string $language
     ) {
+        $this->original = $original;
         $this->abstract = $abstract;
         $this->language = $language;
+    }
+
+    public function getOriginal() : string
+    {
+        return $this->original;
     }
 
     public function getAbstract() : string

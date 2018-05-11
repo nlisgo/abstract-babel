@@ -13,7 +13,7 @@ final class TranslationDenormalizer implements DenormalizerInterface, Denormaliz
 
     public function denormalize($data, $class, $format = null, array $context = []) : Translation
     {
-        return new Translation($data['TranslatedText'], $data['TargetLanguageCode']);
+        return new Translation($data['original'], $data['TranslatedText'], $data['TargetLanguageCode']);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool

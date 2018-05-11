@@ -137,9 +137,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app->get('/babel', 'controllers.babel:babelAction');
 
-        $this->app->get('/', function () {
-            return $this->app['twig']->render('home.html.twig');
-        });
+        $this->app['controllers.home'] = function () {
+            return new HomeController($this->app['twig'], $this->app['controllers.babel']);
+        };
+
+        $this->app->get('/', 'controllers.home:homeAction');
 
         $this->app->after(function (Request $request, Response $response) {
             if ($response->isCacheable()) {
