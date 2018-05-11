@@ -12,7 +12,9 @@ composer install
 docker-compose up -d
 ```
 
-Visit: <http://localhost:8080/babel?doi=10.7554/eLife.36998&from=en&to=fr>
+Visit the widget: <http://localhost:8080/?doi=10.7554/eLife.36998&from=en&to=fr>
+
+Visit the API: <http://localhost:8080/babel?doi=10.7554/eLife.36998&from=en&to=fr>
 
 Swap the doi, from and to values to translate your favourite abstract.
 
